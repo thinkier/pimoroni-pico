@@ -94,7 +94,7 @@ bool get_display_settings(PicoGraphicsDisplay display, int &width, int &height, 
             break;
         case DISPLAY_I2C_OLED_128X64:
             width = 128;
-            height = 128;
+            height = 64;
             bus_type = BUS_I2C;
             if(rotate == -1) rotate = (int)Rotation::ROTATE_0;
             if(pen_type == -1) pen_type = PEN_1BIT;
