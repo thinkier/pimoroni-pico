@@ -92,6 +92,13 @@ bool get_display_settings(PicoGraphicsDisplay display, int &width, int &height, 
             if(rotate == -1) rotate = (int)Rotation::ROTATE_0;
             if(pen_type == -1) pen_type = PEN_1BIT;
             break;
+        case DISPLAY_I2C_OLED_128X64:
+            width = 128;
+            height = 128;
+            bus_type = BUS_I2C;
+            if(rotate == -1) rotate = (int)Rotation::ROTATE_0;
+            if(pen_type == -1) pen_type = PEN_1BIT;
+            break;
         case DISPLAY_INKY_PACK:
             width = 296;
             height = 128;
@@ -234,7 +241,7 @@ mp_obj_t ModPicoGraphics_make_new(const mp_obj_type_t *type, size_t n_args, size
     } else if (display == DISPLAY_LCD_160X80) {
         self->display = m_new_class(ST7735, width, height, spi_bus);
 
-    } else if (display == DISPLAY_I2C_OLED_128X128) {
+    } else if (display == DISPLAY_I2C_OLED_128X128 || display == DISPLAY_I2C_OLED_128X64) {
         int i2c_address = args[ARG_i2c_address].u_int;
         if(i2c_address == -1) i2c_address = SH1107::DEFAULT_I2C_ADDRESS;
 
