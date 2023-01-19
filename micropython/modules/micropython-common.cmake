@@ -40,6 +40,7 @@ include(encoder/micropython)
 include(motor/micropython)
 include(qrcode/micropython/micropython)
 include(adcfft/micropython)
+include(gpio_pulser/micropython)
 include(pcf85063a/micropython)
 
 include(picographics/micropython)

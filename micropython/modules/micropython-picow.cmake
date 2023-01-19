@@ -43,6 +43,7 @@ include(pcf85063a/micropython)
 
 # Utility
 include(adcfft/micropython)
+include(gpio_pulser/micropython)
 
 # LEDs & Matrices
 include(plasma/micropython)
