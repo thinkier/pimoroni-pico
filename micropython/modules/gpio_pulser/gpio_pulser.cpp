@@ -29,17 +29,22 @@ mp_obj_t gpio_pulser_write(mp_obj_t freq, mp_obj_t byte_array) {
     mp_obj_iter_buf_t iter_buf;
     mp_obj_t item, iterable = mp_getiter(byte_array, &iter_buf);
 
-    auto start = get_absolute_time();
-    auto delta_max = 0;
+    vector <uint8_t> bytes;
     while ((item = mp_iternext(iterable)) != MP_OBJ_STOP_ITERATION) {
         // do something with the item just retrieved
+        bytes.push_back(mp_obj_get_int(item));
+    }
+
+    auto start = get_absolute_time();
+    for (uint8_t byte: bytes) {
+        auto delta_max = 0;
+
         auto delta = absolute_time_diff_us(start, get_absolute_time());
         if (delta > delta_max) {
             delta_max = delta;
         }
         start = get_absolute_time();
     }
-
     return mp_obj_new_int(delta_max);
 }
 }
