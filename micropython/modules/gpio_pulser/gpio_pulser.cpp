@@ -28,3 +28,4 @@ mp_obj_t gpio_pulser_write_bits(mp_obj_t freq, mp_obj_t byte_array) {
 
     return mp_const_none;
 }
+}
