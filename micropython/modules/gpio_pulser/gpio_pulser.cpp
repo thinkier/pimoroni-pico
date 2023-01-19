@@ -1,12 +1,9 @@
 #include "hardware/gpio.h"
 
-using namespace pimoroni;
-
 int8_t gpio_pulser_pin = -1;
 
 extern "C" {
 #include "gpio_pulser.h"
-#include "pimoroni_i2c.h"
 
 #define NOT_INITIALISED_MSG     "GPIO Pulser: Not initialised. Call gpio_pulser.init(<gpio #>) first."
 
