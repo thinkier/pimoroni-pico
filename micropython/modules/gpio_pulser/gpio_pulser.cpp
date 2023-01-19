@@ -24,7 +24,7 @@ mp_obj_t gpio_pulser_write(mp_obj_t freq, mp_obj_t byte_array) {
         return mp_const_none;
     }
 
-    float f = mp_obj_get_float(freq);
+//    float f = mp_obj_get_float(freq);
 
     mp_obj_iter_buf_t iter_buf;
     mp_obj_t item, iterable = mp_getiter(byte_array, &iter_buf);
