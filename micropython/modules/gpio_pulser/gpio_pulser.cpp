@@ -17,7 +17,7 @@ mp_obj_t gpio_pulser_init(mp_obj_t pin) {
 }
 
 // Write the bytes to the pin at the specified frequency, big endian
-mp_obj_t gpio_pulser_write_bits(mp_obj_t freq, mp_obj_t byte_array) {
+mp_obj_t gpio_pulser_write(mp_obj_t freq, mp_obj_t byte_array) {
     if (gpio_pulser_pin < 0) {
         mp_raise_msg(&mp_type_RuntimeError, NOT_INITIALISED_MSG);
         return mp_const_none;
