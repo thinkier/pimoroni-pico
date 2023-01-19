@@ -36,15 +36,16 @@ mp_obj_t gpio_pulser_write(mp_obj_t freq, mp_obj_t byte_array) {
     }
 
     auto start = get_absolute_time();
-    for (uint8_t byte: bytes) {
-        auto delta_max = 0;
+    auto delta_max = 0;
 
+    for (uint8_t byte: bytes) {
         auto delta = absolute_time_diff_us(start, get_absolute_time());
         if (delta > delta_max) {
             delta_max = delta;
         }
         start = get_absolute_time();
     }
+
     return mp_obj_new_int(delta_max);
 }
 }
