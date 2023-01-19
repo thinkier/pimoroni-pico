@@ -20,6 +20,18 @@ mp_obj_t gpio_pulser_init(mp_obj_t pin) {
     return mp_const_none;
 }
 
+vector <uint8_t> to_bytes(mp_obj_t byte_array) {
+    mp_obj_iter_buf_t iter_buf;
+    mp_obj_t item, iterable = mp_getiter(byte_array, &iter_buf);
+
+    vector <uint8_t> bytes;
+    while ((item = mp_iternext(iterable)) != MP_OBJ_STOP_ITERATION) {
+        bytes.push_back(mp_obj_get_int(item));
+    }
+
+    return bytes;
+}
+
 // Write the bytes to the pin at the specified frequency, big endian
 mp_obj_t gpio_pulser_write(mp_obj_t freq, mp_obj_t byte_array) {
     if (gpio_pulser_pin < 0) {
@@ -27,30 +39,21 @@ mp_obj_t gpio_pulser_write(mp_obj_t freq, mp_obj_t byte_array) {
         return mp_const_none;
     }
 
-//    float f = mp_obj_get_float(freq);
-
-    mp_obj_iter_buf_t iter_buf;
-    mp_obj_t item, iterable = mp_getiter(byte_array, &iter_buf);
-
-    vector <uint8_t> bytes;
-    while ((item = mp_iternext(iterable)) != MP_OBJ_STOP_ITERATION) {
-        // do something with the item just retrieved
-        bytes.push_back(mp_obj_get_int(item));
-    }
+    float interval_us = 1e6 / mp_obj_get_float(freq);
+    auto bytes = to_bytes(byte_array);
 
     auto start = get_absolute_time();
-    auto delta_max = 0;
+    uint64_t s = 0;
 
     for (uint8_t byte: bytes) {
-        gpio_put(gpio_pulser_pin, byte);
+        for (int i = 7; i >= 0; i--) {
+            bool bit = (byte >> i) & 0b1;
 
-        auto delta = absolute_time_diff_us(start, get_absolute_time());
-        if (delta > delta_max) {
-            delta_max = delta;
+            busy_wait_until(delayed_by_us(start, interval_us * ++s));
+            gpio_put(gpio_pulser_pin, bit);
         }
-        start = get_absolute_time();
     }
 
-    return mp_obj_new_int(delta_max);
+    return mp_const_none;
 }
 }
