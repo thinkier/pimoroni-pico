@@ -1,3 +1,4 @@
+#include "pico_time.h"
 #include "hardware/gpio.h"
 
 int8_t gpio_pulser_pin = -1;
@@ -23,6 +24,22 @@ mp_obj_t gpio_pulser_write(mp_obj_t freq, mp_obj_t byte_array) {
         return mp_const_none;
     }
 
-    return mp_const_none;
+    float f = mp_obj_get_float(freq);
+
+    mp_obj_iter_buf_t iter_buf;
+    mp_obj_t item, iterable = mp_getiter(byte_array, &iter_buf);
+
+    auto start = get_absolute_time();
+    auto delta_max = 0;
+    while ((item = mp_iternext(iterable)) != MP_OBJ_STOP_ITERATION) {
+        // do something with the item just retrieved
+        auto delta = absolute_time_diff_us(start, get_absolute_time());
+        if (delta > delta_max) {
+            delta_max = delta;
+        }
+        start = get_absolute_time();
+    }
+
+    return mp_obj_new_int(delta_max);
 }
 }
